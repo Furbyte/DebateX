@@ -1,0 +1,48 @@
+Add New Event
+Private Sub Event_create_ok_Click()
+
+    Dim eventname, eventhall As String
+    Dim eventdate As Date
+    Dim EventTime As Date
+    Dim eventresult1 As Boolmsg
+    Dim eventresult2 As Boolmsg
+    Dim eventresult3 As Boolmsg
+    Dim eventresult4 As Boolmsg
+   
+    eventname = sql_encode(Event_name_enter.text)
+    eventhall = sql_encode(Event_create_hall.text)
+    
+    
+    
+    'creating a new function
+    eventresult1 = isValid_addevent_eventname(eventname)
+    eventresult2 = isvalid_addevent_eventdate(Event_date_enter.text)
+    eventresult3 = isValid_addevent_eventhall(eventhall)
+    eventresult4 = isValid_addevent_eventtime(Event_time_start.text)
+    
+    
+
+    If (eventresult1.state = False) Then
+        MsgBox (eventresult1.message)
+    ElseIf (eventresult2.state = False) Then
+        MsgBox (eventresult2.message)
+    ElseIf (eventresult3.state = False) Then
+        MsgBox (eventresult3.message)
+    ElseIf (eventresult4.state = False) Then
+        MsgBox (eventresult4.message)
+
+    Else
+        Dim myEvent As Table_event
+        
+        eventdate = Format(CDate(Event_date_enter.text), "dd/mm/yyyy")
+        EventTime = Format(CDate(Event_time_start.text), "hh:mm")
+                
+        myEvent.Event_Date = eventdate
+        myEvent.Event_time = EventTime
+        myEvent.Hall_No = eventhall
+        myEvent.Event_Name = eventname
+        MsgBox ("valid")
+        Call table_events_addNew(myEvent)
+    End If
+            
+End Sub

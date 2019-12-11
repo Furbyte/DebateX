@@ -1,0 +1,80 @@
+Mod_Table_Events
+
+Type Table_event
+id As Integer
+Event_Name As String * 30
+Event_Date As Date
+Hall_No As Integer
+Event_time As Date
+End Type
+
+Dim recset As ADODB.Recordset
+
+Public Sub table_events_addNew(ByRef myEvent As Table_event)
+    Set recset = db_query("SELECT * FROM Event")
+    
+    If recset.EOF = False Then recset.MoveLast
+   
+    
+    If (myEvent.id = 0) Then
+        'autogenerate the ID field.
+    Else
+        'manually set the ID field
+        recset.Fields("ID") = myEvent.id
+    End If
+    
+    SQL$ = "insert into Event (Event_Name,Event_Date,Hall_No,Event_Time) VALUES ('" + myEvent.Event_Name + "','" + Str$(myEvent.Event_Date) + "'," + Str$(myEvent.Hall_No) + ",'" + Str$(myEvent.Event_time) + "')"
+    db_query (SQL$)
+    
+   
+    recset.Close
+End Sub
+
+Public Function tablemyEvent_getLastID()
+    Dim SQL As String
+    
+    SQL = "SELECT * from myEvent order by ID desc"
+    Set recset = db_query(SQL)
+    
+    
+    recset.MoveFirst
+    tablemyEvent_getLastID = recset.Fields("ID")
+    
+    recset.Close
+End Function
+
+Public Function tableEvent_getEventByID(id As Integer) As Table_event
+    Dim SQL As String
+    SQL = "SELECT * FROM Event where ID=" & id
+    Set recset = db_query(SQL)
+    
+    Dim myEvent As TableEvent
+    
+    If recset.EOF Then
+        myEvent.id = 0
+    Else
+        recset.MoveFirst
+       
+        myEvent.id = recset.Fields("ID")
+        myEvent.Event_Name = recset.Fields("Event_Name")
+        myEvent.Event_Date = recset.Fields("Event_Date")
+        myEvent.Hall_No = recset.Fields("Hall_No")
+        myEvent.Event_time = recset.Fields("Event_Time")
+    
+    End If
+    tableEvent_getEventByID = myEvent
+    
+    recset.Close
+    
+End Function
+
+Public Sub tableEvent_updateEvent(ByVal id, ByRef myEvent As Table_event)
+    Set recset = db_query("SELECT * FROM Event where ID=" + Str$(id))
+    recset.MoveFirst
+     recset.Fields("Event_Name") = myEvent.Event_Name
+    recset.Fields("Event_Date") = myEvent.Event_Date
+    recset.Fields("Event_Hall") = myEvent.Hall_No
+    recset.Fields("Event_Time") = myEvent.Event_time
+    recset.Update
+    
+End Sub

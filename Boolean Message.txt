@@ -1,0 +1,6 @@
+Boolmsg
+
+Type Boolmsg
+    state As Boolean
+    message As String
+End Type

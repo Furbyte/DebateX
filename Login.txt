@@ -1,0 +1,31 @@
+
+Login
+
+Option Explicit
+
+Public LoginSucceeded As Boolean
+
+Private Sub cmdCancel_Click()
+    'set the global var to false
+    'to denote a failed login
+    LoginSucceeded = False
+    Me.Hide
+End Sub
+
+Private Sub cmdOK_Click()
+
+Dim user, pass As String
+Dim result As Boolean
+user = txtUserName.text
+pass = txtPassword.text
+result = check_password(user, pass)
+If result = True Then
+'MsgBox "Login Successfull"
+    menu.Show
+    frmLogin.Hide
+
+Else
+    MsgBox "Login Failed"
+End If
+
+End Sub

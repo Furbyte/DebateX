@@ -1,0 +1,34 @@
+Private Sub Form_Load()
+
+End Sub
+Private Sub View_event_cancel_Click()
+Me.Hide
+
+End Sub
+
+Private Sub View_event_delete_Click()
+On Error GoTo ErrorHandlerNumberTwo
+    
+    If MsgBox("Delete current record", vbYesNo) = vbYes Then
+        View_event_ado.Recordset.Delete
+        View_event_grid.Refresh
+        View_event_ado.Refresh
+    End If
+Exit Sub
+
+ErrorHandlerNumberTwo:
+   MsgBox ("error")
+
+End Sub
+
+Private Sub View_event_edit_Click()
+If View_event_grid.AllowUpdate = False Then
+        View_event_grid.AllowUpdate = True
+        View_event_grid.AllowDelete = True
+        View_event_edit.Caption = "Stop editing"
+    Else
+        View_event_grid.AllowUpdate = False
+        View_event_grid.AllowDelete = False
+        View_event_edit.Caption = "Start editing"
+    End If
+End Sub

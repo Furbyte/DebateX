@@ -1,0 +1,43 @@
+Add New Member
+Public Sub New_members_confirm_Click()
+
+    Dim membername$, MemberClass, MemberStream As String
+   Dim MemberContact as Long
+    Dim MemberID As Integer
+    'creating a new data type
+    Dim result1 As Boolmsg
+    Dim result4 As Boolmsg
+    Dim result5 As Boolmsg
+    
+    membername$ = sql_encode(Add_Member_name_text.text)
+    MemberClass = sql_encode(Add_member_class.text)
+    MemberStream = sql_encode(Add_member_stream.text)
+    MemberContact = sql_encode(Add_Member_contact_text.text)
+    memberaddress = sql_encode(Add_Member_address_text.text)
+        
+    
+    'creating a new function
+    result1 = isValid_addmember_membername(membername$)
+    result4 = isValid_addmember_membercontact(MemberContact)
+    result5 = isValid_addmember_memberaddress(memberaddress)
+    
+
+    If (result1.state = False) Then
+        MsgBox (result1.message)
+    ElseIf (result4.state = False) Then
+        MsgBox (result4.message)
+    ElseIf (result5.state = False) Then
+        MsgBox (result5.message)
+     Else
+        Dim myMember As Table_member
+        MsgBox ("Member Added")
+        myMember.Address = memberaddress
+        myMember.Contact_Number = MemberContact
+        myMember.Member_Class = MemberClass
+        myMember.Member_Name = membername
+        myMember.Stream = MemberStream
+        
+        table_member_addNew myMember
+    End If
+            
+End Sub

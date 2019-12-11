@@ -1,0 +1,144 @@
+(contains all the verifications of fields)
+
+(verification of login)
+Public Function check_password(ByVal user As String, ByVal pass As String) As Boolean
+Open App.Path + "/password.txt" For Input As #23
+Dim username As String
+Dim password As String
+Input #23, username
+Input #23, password
+
+If LCase$(username) = LCase$(user) And LCase$(pass) = LCase$(password) Then
+check_password = True
+Else
+check_password = False
+End If
+Close #23
+End Function
+
+
+
+
+
+
+
+(verification of membername$)
+Function isValid_addmember_membername(ByVal membername$) As Boolmsg
+    Dim result1 As Boolmsg
+    
+    result1.state = True
+    result1.message = ""
+    If (membername$ = "") Then
+        result1.state = False
+        result1.message = "Empty text for member name"
+    ElseIf Len(membername$) > 50 Then
+        result1.message = " length can not exceed 50 characters"
+        result1.state = False
+    End If
+    
+    isValid_addmember_membername = result1
+End Function
+    
+    
+
+(verification of MemberContact)
+Public Function isValid_addmember_membercontact(ByVal MemberContact As String) As Boolmsg
+
+    Dim result4 As Boolmsg
+    result4.state = True
+    result4.message = ""
+    
+    If (IsNumeric(MemberContact) = False) Then
+        result4.state = False
+        result4.message = "Enter number only on contact field"
+    ElseIf Len(MemberContact) <> 7 And Len(MemberContact) <> 10 Then
+        result4.message = " Contact Number should be 7 or 10 characters"
+        result4.state = False
+    End If
+    isValid_addmember_membercontact = result4
+End Function
+
+(verification of memberaddress)
+
+Public Function isValid_addmember_memberaddress(ByVal memberaddress As String) As Boolmsg
+    Dim result5 As Boolmsg
+    result5.state = True
+    result5.message = ""
+    If (memberaddress = "") Then
+        result5.state = False
+        result5.message = "Empty text for member address"
+    ElseIf Len(memberaddress) > 30 Then
+        result5.message = " length can not exceed 30 characters"
+        result5.state = False
+    End If
+    isValid_addmember_memberaddress = result5
+End Function
+
+(verification of eventname)
+Public Function isValid_addevent_eventname(ByVal eventname As String) As Boolmsg
+    Dim eventresult1 As Boolmsg
+    eventresult1.state = True
+    eventresult1.message = ""
+    If (eventname = "") Then
+        eventreusult1.state = False
+        eventresult1.message = "Empty text for event name"
+    ElseIf Len(eventname) > 30 Then
+        eventresult1.message = " length cannot exceed 30 characters"
+    End If
+    isValid_addevent_eventname = eventresult1
+End Function
+
+(verification of eventhall)
+Public Function isValid_addevent_eventhall(ByVal eventhall As String) As Boolmsg
+    Dim eventresult3 As Boolmsg
+    eventresult3.state = True
+    eventresult3.message = ""
+    If (eventhall = "") Then
+        eventreusult3.state = False
+        eventresult3.message = "Empty text for event hall"
+    ElseIf Len(eventhall) > 5 Then
+        eventresult3.message = " length cannot exceed 5 characters"
+    End If
+    isValid_addevent_eventhall = eventresult3
+End Function
+
+(verification of EventTime)
+Public Function isValid_addevent_eventtime(ByVal EventTime As String) As Boolmsg
+    Dim result As Boolmsg
+    On Error GoTo Time_error
+    Dim mydate As Date
+    mydate = Format(CDate(EventTime), "hh:mm")
+    result.state = True
+    
+    
+    If Mid$(EventTime, 3, 1) <> ":" Then
+        result.state = False
+        result.message = "type in hh:mm"
+    End If
+    isValid_addevent_eventtime = result
+ Date_error:
+result.state = False
+result.message = " Invalid format. Type in dd/mm/yyyy"
+isvalid_addevent_eventdate = result
+End Function
+        
+    
+Exit Function
+
+Time_error:
+result.state = False
+result.message = " Invalid format. Type in hh:mm"
+isValid_addevent_eventtime = result
+
+End Function
+
+(verification of eventdate that is entered)
+Function isvalid_addevent_eventdate(ByVal usertext As String) As Boolmsg
+    Dim result As Boolmsg
+    On Error GoTo Date_error
+    Dim mydate As Date
+    mydate = Format(CDate(usertext), "dd/mm/yyyy")
+    result.state = True
+    isvalid_addevent_eventdate = result
+    
+Exit Function

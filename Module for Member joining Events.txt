@@ -1,0 +1,25 @@
+Mod_Table_Member_Joining_Event
+
+
+Type table_member_plus_event
+EventID As Integer
+MemberID As Integer
+
+End Type
+
+Sub tableMembersJoiningEvent_addNew(myData As table_member_plus_event)
+    Dim recset As ADODB.Recordset
+    Set recset = db_query("SELECT * FROM Members_joining_Event")
+    
+    If recset.EOF = False Then recset.MoveLast
+    recset.AddNew
+    recset.Fields("EventID") = myData.EventID
+    recset.Fields("MemberID") = myData.MemberID
+    recset.Update
+    recset.Close
+End Sub
+
+Sub tableMembersJoiningEvent_deleteRow(ByVal memID As Integer, ByVal EventID As Integer)
+    SQL$ = "DELETE FROM Members_joining_Event where MemberID=" + Str$(memID) + " and EventID=" + Str$(EventID)
+    db_query (SQL$)
+End Sub

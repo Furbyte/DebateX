@@ -1,0 +1,58 @@
+View all members
+Private query As String
+
+Public Function setQuery(q As String)
+    query = q
+    Call refreshData
+    
+End Function
+
+Public Function refreshData()
+    'refreshes the current shown data as per the query
+    View_ado.ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Documents and Settings\hyolmo\My Documents\DebateX.mdb;Persist Security Info=False"
+    View_ado.CommandType = adCmdText
+    
+    View_ado.RecordSource = query
+    View_ado.Refresh
+    View_grid.Refresh
+    
+    View_grid.Columns(0).Locked = True
+End Function
+
+Private Sub Form_Load()
+
+End Sub
+
+Private Sub View_cancel_Click()
+    Me.Hide
+End Sub
+
+
+
+
+Private Sub View_member_Edit_Click()
+    If View_grid.AllowUpdate = False Then
+        View_grid.AllowUpdate = True
+        View_grid.AllowDelete = True
+        View_member_Edit.Caption = "Stop editing"
+    Else
+        View_grid.AllowUpdate = False
+        View_grid.AllowDelete = False
+        View_member_Edit.Caption = "Start editing"
+    End If
+End Sub
+
+Private Sub View_memeber_dlt_Click()
+On Error GoTo ErrorHandlerNumberOne
+    
+    If MsgBox("Delete current record", vbYesNo) = vbYes Then
+        View_ado.Recordset.Delete
+        View_grid.Refresh
+        View_ado.Refresh
+    End If
+Exit Sub
+
+ErrorHandlerNumberOne:
+   MsgBox ("error")
+
+End Sub

@@ -1,0 +1,45 @@
+Database connection
+Connection module
+
+Dim conn As ADODB.Connection
+Dim db_connected As Boolean
+
+Function db_connect()
+    If Not db_connected Then
+        Set conn = New ADODB.Connection
+        conn.Open ("dsn=DebateX")
+        db_connected = True
+    End If
+End Function
+
+Function db_disconnect()
+    If db_connected Then
+        db_connected = False
+        conn.Close
+    End If
+End Function
+
+Function db_query(ByVal query$) As ADODB.Recordset
+    Set rec_set = New ADODB.Recordset
+    rec_set.LockType = adLockOptimistic
+    rec_set.CursorType = adOpenStatic
+    rec_set.ActiveConnection = conn
+    rec_set.Source = query$
+    rec_set.Open
+    Set db_query = rec_set
+End Function
+
+Function sql_encode(ByVal text As String) As String
+    Dim result As String
+    For i = 1 To Len(text)
+    Char$ = Mid$(test, i, 1)
+    If Char$ <> "'" Then
+        result = result + Char$
+    End If
+    
+    Next
+    
+    sql_encode = result
+       
+    
+End Function

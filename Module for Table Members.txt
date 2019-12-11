@@ -1,0 +1,84 @@
+Mod_Table_Members
+
+Type Table_member
+id As Integer
+Member_Name As String * 50
+Member_Class As String * 2
+Stream As String * 15
+Contact_Number As Long
+Address As String * 30
+
+End Type
+
+Dim recset As ADODB.Recordset
+
+Public Sub table_member_addNew(ByRef myMember As Table_member)
+
+    Set recset = db_query("SELECT * FROM Member")
+    
+    If recset.EOF = False Then recset.MoveLast
+   
+    
+    If (myMember.id = 0) Then
+        'autogenerate the ID field.
+    Else
+        'manually set the ID field
+        recset.Fields("ID") = myMember.id
+    End If
+    
+    SQL$ = "insert into Member (Member_Name,Member_Class,Stream,Contact_Number,Address) VALUES ('" + myMember.Member_Name + "','" + myMember.Member_Class + "','" + myMember.Stream + "'," + Str$(myMember.Contact_Number) + ",'" + myMember.Address + "');"
+    db_query (SQL$)
+    
+   
+    recset.Close
+End Sub
+
+Public Function tablemyMember_getLastID()
+    Dim SQL As String
+    
+    SQL = "SELECT * from Member order by ID desc"
+    Set recset = db_query(SQL)
+    
+    
+    recset.MoveFirst
+    tablemyMember_getLastID = recset.Fields("ID")
+    
+    recset.Close
+End Function
+
+Public Function tableMember_getMemberByID(id As Integer) As Table_member
+    Dim SQL As String
+    SQL = "SELECT * FROM Member where ID=" & id
+    Set recset = db_query(SQL)
+    
+    Dim myMember As Table_member
+    
+    If recset.EOF Then
+        myMember.id = 0
+    Else
+        recset.MoveFirst
+       
+        myMember.id = recset.Fields("ID")
+        myMember.Member_Name = recset.Fields("Member_Name")
+        myMember.Member_Class = recset.Fields("Member_Class")
+        myMember.Stream = recset.Fields("Stream")
+        myMember.Address = recset.Fields("Address")
+        myMember.Contact_Number = recset.Fields("Contact_Number")
+    
+    End If
+    tableMember_getMemberByID = myMember
+    
+    recset.Close
+    
+End Function
+Public Sub tableMember_updateMember(ByVal id, ByRef myMember As Table_member)
+    Set recset = db_query("SELECT * FROM Member where ID=" + Str$(id))
+    recset.MoveFirst
+    recset.Fields("Member_Name") = myMember.Member_Name
+    recset.Fields("Member_Class") = myMember.Member_Class
+    recset.Fields("Stream") = myMember.Stream
+    recset.Fields("Address") = myMember.Address
+    recset.Fields("Contact_Number") = myMember.Contact_Number
+    recset.Update
+    
+End Sub
